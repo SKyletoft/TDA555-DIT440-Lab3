@@ -2,7 +2,7 @@
 module Shapes where
 
 import Data.List (transpose)
-import Data.Maybe (isNothing)
+import Data.Maybe (isNothing, isJust)
 import Test.QuickCheck
 
 -- * Shapes
@@ -94,10 +94,7 @@ allShapes = [S (makeSquares s) | s <- shapes]
 -- ** A1
 
 emptyShape :: (Int, Int) -> Shape
-emptyShape (w, h) = S (replicate h (replicate w emptyBlock))
-  where
-    emptyBlock :: Square
-    emptyBlock = Nothing
+emptyShape (w, h) = S (replicate h (replicate w Nothing))
 
 -- ** A2
 
@@ -109,9 +106,7 @@ shapeSize (S rs) = (length (head rs), length rs)
 
 -- | Count how many non-empty squares a shape contains
 blockCount :: Shape -> Int
-blockCount (S rows) = length (filter (/= Nothing) flat)
-  where
-    flat = concat rows
+blockCount (S rows) = length (filter isJust (concat rows))
 
 -- * The Shape invariant
 
